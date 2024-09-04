@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Captura y Redimensión de Fotos</title>
+</head>
+<body>
+    <h1>Captura y Redimensión de Fotos</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="1000" height="1000" style="display: none;"></canvas>
+    <button id="capture">Capturar Foto</button>
+    
+    <label for="filename">Nombre del archivo:</label>
+    <input type="text" id="filename" placeholder="nombre_de_foto" />
+    
+    <button id="save">Guardar Foto</button>
+    
+    <script src="app.js"></script>
+</body>
+</html>
