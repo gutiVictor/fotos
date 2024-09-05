@@ -1,11 +1,13 @@
 :root {
-    --primary-color: #28a745;
-    --primary-color-hover: #218838;
-    --border-radius: 8px;
-    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --bg-color: #f4f4f4;
-    --text-color: #333;
+    --primary-color: #1e90ff; /* Azul brillante */
+    --primary-color-hover: #1c86ee; /* Azul más oscuro para el hover */
+    --border-radius: 10px;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    --font-family: 'Roboto', sans-serif;
+    --bg-color: #121212; /* Fondo oscuro */
+    --text-color: #e0e0e0; /* Texto claro */
+    --input-bg: #333; /* Fondo de inputs */
+    --input-border: #444; /* Borde de inputs */
 }
 
 body {
@@ -29,7 +31,7 @@ h1 {
 }
 
 video, canvas {
-    border: 2px solid #000;
+    border: 2px solid #444;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     max-width: 100%;
@@ -58,7 +60,9 @@ button:hover {
 #filename {
     padding: 10px;
     border-radius: var(--border-radius);
-    border: 1px solid #ccc;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-color);
     width: 100%;
     max-width: 300px;
     box-shadow: var(--box-shadow);

@@ -17,6 +17,99 @@
     
     <button id="save">Guardar Foto</button>
     
-    <script src="app.js"></script>
+    <label for="cameraSelect">Seleccionar Cámara:</label>
+    <select id="cameraSelect">
+        <option value="">Selecciona una cámara</option>
+    </select>
+    
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const saveButton = document.getElementById('save');
+        const context = canvas.getContext('2d');
+        const filenameInput = document.getElementById('filename');
+        const cameraSelect = document.getElementById('cameraSelect');
+
+        async function getVideoDevices() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                // Filtra cámaras frontales y traseras
+                return videoDevices;
+            } catch (error) {
+                console.error('Error al obtener los dispositivos de video:', error);
+                return [];
+            }
+        }
+
+        async function startCamera(deviceId) {
+            try {
+                const constraints = {
+                    video: {
+                        deviceId: deviceId ? { exact: deviceId } : undefined,
+                        facingMode: { exact: "environment" }  // Forza el uso de la cámara trasera
+                    }
+                };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+            } catch (error) {
+                console.error("Error al acceder a la cámara:", error);
+                alert("Es necesario conceder permisos de cámara para usar esta funcionalidad.");
+            }
+        }
+
+        async function populateCameraSelect() {
+            try {
+                const videoDevices = await getVideoDevices();
+                if (videoDevices.length === 0) {
+                    throw new Error('No se encontraron dispositivos de video.');
+                }
+
+                cameraSelect.innerHTML = '<option value="">Selecciona una cámara</option>'; // Limpiar opciones anteriores
+
+                videoDevices.forEach(device => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.text = device.label || `Cámara ${cameraSelect.length + 1}`;
+                    cameraSelect.appendChild(option);
+                });
+
+                // Iniciar cámara con la primera opción seleccionada por defecto
+                if (videoDevices.length > 0) {
+                    cameraSelect.value = videoDevices[0].deviceId;
+                    startCamera(videoDevices[0].deviceId);
+                }
+            } catch (error) {
+                console.error('Error al poblar la lista de cámaras:', error);
+            }
+        }
+
+        cameraSelect.addEventListener('change', () => {
+            const selectedDeviceId = cameraSelect.value;
+            if (selectedDeviceId) {
+                startCamera(selectedDeviceId);
+            }
+        });
+
+        captureButton.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, 1000, 1000);
+        });
+
+        function compressImage(canvas, quality = 0.6) {
+            return canvas.toDataURL('image/jpeg', quality);
+        }
+
+        saveButton.addEventListener('click', () => {
+            const filename = filenameInput.value.trim() || 'foto';
+            const compressedImage = compressImage(canvas, 0.6);
+            const link = document.createElement('a');
+            link.href = compressedImage;
+            link.download = `${filename}.jpg`;
+            link.click();
+        });
+
+        populateCameraSelect();
+    </script>
 </body>
 </html>
